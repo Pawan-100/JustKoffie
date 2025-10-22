@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo, useMemo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './App.css'
-import coffeeCup from './assets/images/Coffee Cup.jpg'
 import coffeeMachine from './assets/images/Coffee Machine and Cup.jpg'
 import coffeeStall from './assets/images/Coffee Stall.jpg'
+import { menuItems } from './data/menuData'
 import { GiCoffeeBeans, GiCoffeePot } from 'react-icons/gi'
 import { FaLeaf, FaInstagram, FaFacebookF, FaTwitter, FaMapMarkerAlt, FaClock, FaCoffee } from 'react-icons/fa'
 import { IoMdFlame } from 'react-icons/io'
+import OptimizedImage from './components/OptimizedImage'
+import LoadingSkeleton from './components/LoadingSkeleton'
+import MenuCard from './components/MenuCard'
+import FeatureCard from './components/FeatureCard'
 
 function App() {
+  const navigate = useNavigate()
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
 
@@ -19,54 +25,15 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const scrollToSection = (id) => {
+  const scrollToSection = useCallback((id) => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
       setActiveSection(id)
     }
-  }
+  }, [])
 
-  const menuItems = [
-    {
-      name: 'Espresso',
-      description: 'Rich and bold Italian coffee shot',
-      price: '$3.50',
-      image: 'https://images.unsplash.com/photo-1640587662002-ae577f8f96dd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxlc3ByZXNzbyUyMGN1cHxlbnwwfHx8fDE3NjExMjk1MzR8MA&ixlib=rb-4.1.0&q=85'
-    },
-    {
-      name: 'Cappuccino',
-      description: 'Perfect blend of espresso, steamed milk & foam',
-      price: '$4.50',
-      image: 'https://images.unsplash.com/photo-1497636577773-f1231844b336?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwyfHxsYXR0ZSUyMGFydHxlbnwwfHx8fDE3NjExMjk1Mjl8MA&ixlib=rb-4.1.0&q=85'
-    },
-    {
-      name: 'Latte',
-      description: 'Smooth espresso with velvety steamed milk',
-      price: '$4.75',
-      image: 'https://images.unsplash.com/photo-1529892485617-25f63cd7b1e9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxsYXR0ZSUyMGFydHxlbnwwfHx8fDE3NjExMjk1Mjl8MA&ixlib=rb-4.1.0&q=85'
-    },
-    {
-      name: 'Cold Brew',
-      description: 'Smooth, refreshing slow-steeped coffee',
-      price: '$5.00',
-      image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxjb2ZmZWUlMjBkcmlua3N8ZW58MHx8fHwxNzYxMDMxNDc0fDA&ixlib=rb-4.1.0&q=85'
-    },
-    {
-      name: 'Iced Coffee',
-      description: 'Chilled perfection for warm days',
-      price: '$4.25',
-      image: 'https://images.unsplash.com/photo-1534414671319-4fc58cc112e1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxjb2ZmZWUlMjBkcmlua3N8ZW58MHx8fHwxNzYxMDMxNDc0fDA&ixlib=rb-4.1.0&q=85'
-    },
-    {
-      name: 'Mocha',
-      description: 'Decadent chocolate meets espresso',
-      price: '$5.25',
-      image: coffeeCup
-    }
-  ]
-
-  const features = [
+  const features = useMemo(() => [
     {
       icon: GiCoffeeBeans,
       title: 'Premium Beans',
@@ -87,16 +54,16 @@ function App() {
       title: 'Sustainable',
       description: 'Ethically sourced and environmentally conscious practices'
     }
-  ]
+  ], [])
 
-  const galleryImages = [
+  const galleryImages = useMemo(() => [
     'https://images.unsplash.com/photo-1453614512568-c4024d13c247',
     'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56',
     'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085',
     'https://images.unsplash.com/photo-1532713107108-dfb5d8d2fc42',
     'https://images.unsplash.com/photo-1507915135761-41a0a222c709',
     'https://images.pexels.com/photos/302887/pexels-photo-302887.jpeg'
-  ]
+  ], [])
 
   return (
     <div className="bg-coffee-50">
@@ -180,7 +147,7 @@ function App() {
               </p>
             </div>
             <div className="relative">
-              <img 
+              <OptimizedImage 
                 src={coffeeMachine} 
                 alt="Coffee Machine" 
                 className="rounded-lg shadow-2xl hover-scale"
@@ -198,22 +165,9 @@ function App() {
             Why Choose Us
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon;
-              return (
-                <div 
-                  key={index} 
-                  className="bg-white p-8 rounded-lg shadow-lg text-center hover-scale"
-                  data-testid={`feature-${index}`}
-                >
-                  <div className="flex justify-center mb-4">
-                    <IconComponent className="text-6xl text-coffee-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-coffee-800 mb-3">{feature.title}</h3>
-                  <p className="text-coffee-700">{feature.description}</p>
-                </div>
-              );
-            })}
+            {features.map((feature, index) => (
+              <FeatureCard key={index} feature={feature} index={index} />
+            ))}
           </div>
         </div>
       </section>
@@ -229,24 +183,7 @@ function App() {
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {menuItems.map((item, index) => (
-              <div 
-                key={index} 
-                className="bg-coffee-50 rounded-lg overflow-hidden shadow-lg hover-scale"
-                data-testid={`menu-item-${index}`}
-              >
-                <img 
-                  src={item.image} 
-                  alt={item.name}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-2xl font-bold text-coffee-800">{item.name}</h3>
-                    <span className="text-2xl font-bold text-coffee-600">{item.price}</span>
-                  </div>
-                  <p className="text-coffee-700">{item.description}</p>
-                </div>
-              </div>
+              <MenuCard key={item.id} item={item} index={index} />
             ))}
           </div>
         </div>
@@ -282,7 +219,7 @@ function App() {
               </div>
             </div>
             <div className="relative">
-              <img 
+              <OptimizedImage 
                 src={coffeeStall} 
                 alt="Just Koffie Coffee Shop Exterior" 
                 className="rounded-lg shadow-2xl hover-scale w-full h-auto"
@@ -306,7 +243,7 @@ function App() {
                 className="overflow-hidden rounded-lg shadow-lg hover-scale"
                 data-testid={`gallery-image-${index}`}
               >
-                <img 
+                <OptimizedImage 
                   src={image} 
                   alt={`Gallery ${index + 1}`}
                   className="w-full h-64 object-cover"
