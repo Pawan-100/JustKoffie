@@ -10,7 +10,7 @@ const MenuItemDetail = lazy(() => import('./components/MenuItemDetail.jsx'))
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename="/JustKoffie">
+    <BrowserRouter>
       <Suspense fallback={<LoadingSkeleton type="detail" />}>
         <Routes>
           <Route path="/" element={<App />} />
