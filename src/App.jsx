@@ -3,6 +3,9 @@ import './App.css'
 import coffeeCup from './assets/images/Coffee Cup.jpg'
 import coffeeMachine from './assets/images/Coffee Machine and Cup.jpg'
 import coffeeStall from './assets/images/Coffee Stall.jpg'
+import { GiCoffeeBeans, GiCoffeePot } from 'react-icons/gi'
+import { FaLeaf, FaInstagram, FaFacebookF, FaTwitter, FaMapMarkerAlt, FaClock, FaCoffee } from 'react-icons/fa'
+import { IoMdFlame } from 'react-icons/io'
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -65,22 +68,22 @@ function App() {
 
   const features = [
     {
-      icon: '☕',
+      icon: GiCoffeeBeans,
       title: 'Premium Beans',
       description: 'Hand-selected beans from the finest coffee regions worldwide'
     },
     {
-      icon: '🔥',
+      icon: IoMdFlame,
       title: 'Expert Roasting',
       description: 'Small-batch roasting to bring out unique flavor profiles'
     },
     {
-      icon: '👨‍🍳',
+      icon: GiCoffeePot,
       title: 'Skilled Baristas',
       description: 'Trained professionals crafting each cup with care'
     },
     {
-      icon: '🌱',
+      icon: FaLeaf,
       title: 'Sustainable',
       description: 'Ethically sourced and environmentally conscious practices'
     }
@@ -112,7 +115,7 @@ function App() {
               </h1>
             </div>
             <div className="hidden md:flex space-x-8">
-              {['home', 'about', 'menu', 'gallery', 'contact'].map((item) => (
+              {['home', 'about', 'menu', 'location', 'gallery', 'contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
@@ -195,17 +198,22 @@ function App() {
             Why Choose Us
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="bg-white p-8 rounded-lg shadow-lg text-center hover-scale"
-                data-testid={`feature-${index}`}
-              >
-                <div className="text-6xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-coffee-800 mb-3">{feature.title}</h3>
-                <p className="text-coffee-700">{feature.description}</p>
-              </div>
-            ))}
+            {features.map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
+                <div 
+                  key={index} 
+                  className="bg-white p-8 rounded-lg shadow-lg text-center hover-scale"
+                  data-testid={`feature-${index}`}
+                >
+                  <div className="flex justify-center mb-4">
+                    <IconComponent className="text-6xl text-coffee-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-coffee-800 mb-3">{feature.title}</h3>
+                  <p className="text-coffee-700">{feature.description}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -240,6 +248,47 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Location Section */}
+      <section id="location" className="py-20 px-4 bg-coffee-800" data-testid="location-section">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h2 className="text-5xl font-serif font-bold mb-6" data-testid="location-title">
+                Visit Our Coffee Shop
+              </h2>
+              <p className="text-xl text-coffee-200 mb-6 leading-relaxed">
+                Step into a world where coffee meets community. Our welcoming storefront has been serving the neighborhood with exceptional coffee and warm hospitality.
+              </p>
+              <p className="text-lg text-coffee-200 mb-6 leading-relaxed">
+                Whether you're grabbing your morning brew or settling in for an afternoon of work, our cozy atmosphere and expertly crafted beverages make Just Koffie the perfect destination.
+              </p>
+              <div className="space-y-4 text-coffee-100">
+                <div className="flex items-center gap-3 text-lg">
+                  <FaMapMarkerAlt className="text-2xl text-coffee-300" />
+                  <span>Come visit us and experience the difference</span>
+                </div>
+                <div className="flex items-center gap-3 text-lg">
+                  <FaClock className="text-2xl text-coffee-300" />
+                  <span>Open daily from 7 AM to 8 PM</span>
+                </div>
+                <div className="flex items-center gap-3 text-lg">
+                  <FaCoffee className="text-2xl text-coffee-300" />
+                  <span>Fresh coffee, friendly faces, fantastic vibes</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src={coffeeStall} 
+                alt="Just Koffie Coffee Shop Exterior" 
+                className="rounded-lg shadow-2xl hover-scale w-full h-auto"
+                data-testid="location-image"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -284,7 +333,7 @@ function App() {
               data-testid="social-instagram"
               aria-label="Instagram"
             >
-              📷
+              <FaInstagram />
             </a>
             <a 
               href="#" 
@@ -292,7 +341,7 @@ function App() {
               data-testid="social-facebook"
               aria-label="Facebook"
             >
-              📘
+              <FaFacebookF />
             </a>
             <a 
               href="#" 
@@ -300,7 +349,7 @@ function App() {
               data-testid="social-twitter"
               aria-label="Twitter"
             >
-              🐦
+              <FaTwitter />
             </a>
           </div>
           <p className="text-coffee-200">
